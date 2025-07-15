@@ -1,0 +1,6 @@
+<select class="form-control" data-action="change->untersuchung#change" data-target="untersuchung.select" data-question="{{question.id}}">
+    <option value ="">Bitte auswählen</option>
+    {% for possibleResponse in possibleResponses %}
+        <option value="{{possibleResponse | trim}}">{{possibleResponse}}</option>
+    {% endfor %}
+</select>

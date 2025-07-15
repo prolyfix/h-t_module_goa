@@ -1,0 +1,81 @@
+{% extends '@!EasyAdmin/page/content.html.twig' %}
+{% block main %}
+	<style>
+		.responses .hidden {
+			display: none;
+		}
+	</style>
+	<div
+		class="container-fluid">
+		<!-- start page title -->
+		<div class="row">
+			<div class="col-12">
+				<div class="page-title-box">
+					<h4 class="page-title">{{untersuchungsCategory.name}}</h4>
+				</div>
+			</div>
+		</div>
+		<!-- end page title -->
+
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="card">
+					<div class="card-body" data-controller="untersuchung">
+						<div class="row">
+							<div class="col-md-5">
+								<input type="text" class="form-control" placeholder="Suche" id="kette">
+							</div>
+							<div class="col-md-1">
+								<button class="btn btn-primary" data-action="click->untersuchung#translate">-></button>
+							</div>
+							<div class="col-md-6">
+								<div id="formatted">
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-12">
+								<table class="table" data-controller="untersuchung" style="mt-2" id="untersuchungTable">
+									<tbody>
+										{% for question in untersuchungsCategory.untersuchungsQuestions %}
+											<tr>
+												<td>{{question.question}}</td>
+												<td>{% include '@ProlyfixGoaBundle/untersuchungsCategory/_question.html.twig' with {possibleResponses : question.possibleResponse } %}</td>
+												<td style="min-width:300px" class="responses">
+													{% for possibleResponse in question.untersuchungsAntworts %}
+														<div class="hidden" data-question="{{question.id}}" data-response="{{possibleResponse.response}}">
+															<ul>
+																{% for sequence in possibleResponse.sequences %}
+
+																	{% for entry in sequence.sequenceEntries %}
+																		<li>
+																		<span class="badge bg-secondary" data-number="{{entry.number.number}}">{{entry.number.number}}</span>
+																			: F:{{entry.factor}}
+																			Q:{{entry.quantity}}
+																			{{ entry.comment}}
+																			|
+																			{{entry.number.description}}</li>
+																	{% endfor %}
+																{% endfor %}
+																{% for number in possibleResponse.numbers %}
+																	<li>
+																		<span class="badge bg-secondary" data-number="{{number.number}}">{{number.number}}</span>
+																		|
+																		{{number.description}}</li>
+																{% endfor %}
+															</ul>
+														</div>
+													{% endfor %}
+												</td>
+											</tr>
+										{% endfor %}
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}

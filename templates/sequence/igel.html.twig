@@ -1,0 +1,79 @@
+{% extends '@!EasyAdmin/page/content.html.twig' %}
+{% block main %}
+	<div
+		class="container-fluid">
+		<!-- start page title -->
+		<div class="row">
+			<div class="col-12">
+				<div class="page-title-box">
+					<h4 class="page-title">{% trans %}Order{% endtrans %}</h4>
+				</div>
+			</div>
+		</div>
+		<!-- end page title -->
+
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="card">
+					<div class="card-body">
+                        {{form_start(form)}}
+                        {{form_row(form.compareSequence)}}
+                        {{form_row(form.targetPrice)}}
+                        <input type="submit" class="btn btn-primary
+                                waves-effect waves-light" value="validate"> 
+						{{form_end(form)}}
+                        <table class="table"> 
+                            <thead>
+                                <tr>
+                                    <th>Number</th>
+                                    <th>Quantity</th>
+                                    <th>Factor</th>
+                                    <th>Points</th>
+                                    <th>Price</th>
+                                    <th>Comment</th>
+                                </tr>
+                            <tbody>
+                                {% set Price = 0 %}
+                                {% for sequence in sequence.sequenceEntries %}
+                                    <tr>
+                                        <td>{{sequence.number.number}}</td>
+                                        <td>{{sequence.quantity}}</td>
+                                        <td>
+                                            {% if sequence.factor == 1 %}
+                                                <div class="btn btn-success">{{sequence.factor  | number_format(2,",",".")}}</div>
+                                            {% elseif sequence.factor <= sequence.number.factorAverage %}
+                                                <div class="btn btn-warning">{{sequence.factor  | number_format(2,",",".")}}</div>
+                                            {% else %}
+                                                <div class="btn btn-danger">{{sequence.factor  | number_format(2,",",".")}}</div>
+                                            {% endif %}
+                                        
+                                        
+                                        </td>
+                                        <td>{{sequence.number.points}}</td>
+                                        
+                                        {% if sequence.number.fixedPrice != 0 %}
+                                            <td>{{(sequence.number.fixedPrice)  | number_format(2,",",".")}}</td>
+                                            {% set Price = Price + sequence.number.fixedPrice %}
+                                        {% else %}
+                                            <td>{{(sequence.points * pointValue)  | number_format(2,",",".")}}</td>
+                                            {% set Price = Price + sequence.points * pointValue %}
+                                        {% endif %}
+                                        <td>{{sequence.comment}}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <th>Total</th>
+                                    <td>{{Price | number_format(2,",",".")}}</td>
+                                </tr>   
+                        </table>
+					</div>
+				</div>
+			</div>
+        </div>
+    </div>
+{% endblock %}
