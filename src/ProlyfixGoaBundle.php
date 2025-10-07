@@ -64,6 +64,7 @@ class ProlyfixGoaBundle extends ModuleBundle
 
     public function getMenuConfiguration(): array
     {
+        return [];
         return ['configuration' => [
             
             MenuItem::linkToCrud('Goa List', 'fas fa-list', Number::class),
